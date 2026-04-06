@@ -736,14 +736,19 @@
       "name": "CGTN (HD),CGTN(HD)"
     },
     {
-      "epgid": "CGTN英语",
-      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/CGTN英语.png",
-      "name": "CGTN英语,CGTN (中国环球电视网)英语频道,CGTN(中國環球電視網)英語頻道"
+      "epgid": "CGTN(中國環球電視網)英語頻道",
+      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/CGTN.png",
+      "name": "CGTN(中國環球電視網)英語頻道,CGTN英语,CGTN (中国环球电视网)英语频道"
     },
     {
-      "epgid": "CGTN记录",
-      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/CGTN记录.png",
-      "name": "CGTN记录,CGTN (中国环球电视网)记录频道,CGTN(中國環球電視網)記錄頻道,CGTN(中國環球電視網)记录頻道"
+      "epgid": "CGTN(中國環球電視網)記錄頻道",
+      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/CGTN.png",
+      "name": "CGTN(中國環球電視網)記錄頻道,CGTN记录,CGTN (中国环球电视网)记录频道"
+    },
+    {
+      "epgid": "CGTN(中國環球電視網)记录頻道",
+      "logo": "",
+      "name": "CGTN(中國環球電視網)记录頻道,CGTN记录,CGTN (中国环球电视网)记录频道"
     },
     {
       "epgid": "CGTNDOCUMENTARY",
@@ -1628,7 +1633,7 @@
     {
       "epgid": "历史频道",
       "logo": "",
-      "name": "历史频道,歷史頻道,HISTORY(HD),HISTORY (HD)"
+      "name": "历史频道,HISTORY(HD),HISTORY (HD),歷史頻道"
     },
     {
       "epgid": "歷史頻道",
@@ -2001,14 +2006,9 @@
       "name": "LOVE NATURE 4K,LOVENATURE4K"
     },
     {
-      "epgid": "LSTIME电影台",
-      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/LSTIME电影.png",
-      "name": "LS Time电影台,LSTIME電影台"
-    },
-    {
-      "epgid": "LSTIME电影台",
-      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/LSTIME电影.png",
-      "name": "LSTime电影台,LSTIME电影台"
+      "epgid": "LSTIME電影台",
+      "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/LSTIME.png",
+      "name": "LSTIME電影台,龙祥时代,LS Time电影台,LSTIME电影台"
     },
     {
       "epgid": "LUXETVCHANNEL",

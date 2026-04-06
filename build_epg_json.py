@@ -12,7 +12,7 @@ OUTPUT = "epg.json"
 
 
 # ======================
-# normalize
+# normalize（核心）
 # ======================
 def normalize(text: str) -> str:
     if not text:
@@ -25,19 +25,25 @@ def normalize(text: str) -> str:
 # ======================
 # 读取 icon_map
 # ======================
-icon_map = requests.get(ICON_MAP_URL).json()
+print("加载 icon_map...")
+icon_map = requests.get(ICON_MAP_URL, timeout=30).json()
+
+# 统一key
 norm_icon_map = {normalize(k): v for k, v in icon_map.items()}
 
 
 # ======================
 # 读取 name_map
 # ======================
+print("读取 name_map...")
+
 groups = {}
 
 with open(NAME_MAP_FILE, "r", encoding="utf-8") as f:
     for line in f:
         line = line.strip()
-        if "=" not in line:
+
+        if not line or "=" not in line:
             continue
 
         raw, std = line.split("=", 1)
@@ -45,28 +51,43 @@ with open(NAME_MAP_FILE, "r", encoding="utf-8") as f:
         raw = raw.strip()
         std = std.strip()
 
-        if std not in groups:
-            groups[std] = []
+        if not raw or not std:
+            continue
 
-        groups[std].append(raw)
+        if std not in groups:
+            groups[std] = set()
+
+        groups[std].add(raw)
+        groups[std].add(std)   # 标准名也加进去
 
 
 # ======================
 # 生成 epg.json
 # ======================
+print("生成 epg.json...")
+
 epgs = []
+miss_logo = 0
 
-for std_name, alias_list in groups.items():
+for std_name, alias_set in groups.items():
 
-    key = normalize(std_name)
+    epgid = normalize(std_name)
 
-    # 匹配logo
-    logo = norm_icon_map.get(key, "")
+    # ---------- logo ----------
+    logo = norm_icon_map.get(epgid, "")
+
+    if not logo:
+        miss_logo += 1
+        print("⚠ 未匹配logo:", std_name)
+
+    # ---------- name ----------
+    # 标准名放第一位
+    names = [std_name] + [n for n in alias_set if n != std_name]
 
     epgs.append({
-        "epgid": std_name,
+        "epgid": epgid,
         "logo": logo,
-        "name": ",".join(alias_list)
+        "name": ",".join(names)
     })
 
 
@@ -80,4 +101,6 @@ result = {
 with open(OUTPUT, "w", encoding="utf-8") as f:
     json.dump(result, f, ensure_ascii=False, indent=2)
 
-print("✔ 生成 epg.json:", len(epgs))
+print("\n✔ 完成")
+print("频道数:", len(epgs))
+print("未匹配logo:", miss_logo)

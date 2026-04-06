@@ -1,5 +1,6 @@
 import requests
 import gzip
+import re
 import xml.etree.ElementTree as ET
 
 # ======================
@@ -7,92 +8,73 @@ import xml.etree.ElementTree as ET
 # ======================
 EPG_URL = "https://github.com/badboys88888/epg/raw/refs/heads/main/epg.xml.gz"
 ICON_MAP_URL = "https://raw.githubusercontent.com/badboys88888/epg/refs/heads/main/icon_map.json"
-ALIAS_URL = "https://raw.githubusercontent.com/badboys88888/epg/refs/heads/main/alias_auto.txt"
 
 OUTPUT_FILE = "epg.xml.gz"
 
 
 # ======================
-# 统一规范函数
+# normalize
 # ======================
 def normalize(text: str) -> str:
     if not text:
         return ""
 
     text = text.upper()
-    text = text.replace(" ", "")
-    text = text.replace("\t", "")
-    text = text.replace("-", "")
-    text = text.replace("_", "")
+    text = re.sub(r"[ \-_]", "", text)
     return text
 
 
 # ======================
-# 读取 icon_map（远程）
+# icon_map
 # ======================
-icon_map = requests.get(ICON_MAP_URL, timeout=30).json()
+icon_map = requests.get(ICON_MAP_URL).json()
 norm_icon_map = {normalize(k): v for k, v in icon_map.items()}
 
 
 # ======================
-# 读取 alias（远程）
+# 下载EPG
 # ======================
-alias_map = {}
-
-alias_text = requests.get(ALIAS_URL, timeout=30).text.splitlines()
-
-for line in alias_text:
-    line = line.strip()
-    if not line or "=" not in line:
-        continue
-
-    cid, name = line.split("=", 1)
-    cid = cid.strip()
-    name = name.strip()
-
-    # 用 display-name 做 key
-    alias_map[normalize(name)] = cid
-
-
-# ======================
-# 下载 EPG
-# ======================
-resp = requests.get(EPG_URL, timeout=30)
+resp = requests.get(EPG_URL)
 xml_data = gzip.decompress(resp.content)
 
 root = ET.fromstring(xml_data)
 
 
 # ======================
-# 处理 channel
+# 核心：统一CID
 # ======================
+name_to_cid = {}   # 名字 → 统一CID
+old_to_new = {}    # 旧CID → 新CID
+
 for ch in root.findall("channel"):
 
+    old_id = ch.get("id")
     names = [d.text for d in ch.findall("display-name") if d.text]
+
     if not names:
         continue
 
-    # ======================
-    # CID生成
-    # ======================
     main_name = names[0]
-    base_id = normalize(main_name)
+    key = normalize(main_name)
 
-    # alias修正
-    cid = alias_map.get(base_id, base_id)
+    # 第一次出现，注册统一CID
+    if key not in name_to_cid:
+        name_to_cid[key] = key
 
-    ch.set("id", cid)
+    new_id = name_to_cid[key]
+
+    old_to_new[old_id] = new_id
+    ch.set("id", new_id)
 
     # ======================
-    # logo匹配
+    # logo
     # ======================
     icon_url = None
 
     for n in names:
-        key = normalize(n)
-
-        if key in norm_icon_map:
-            icon_url = norm_icon_map[key]
+        k = normalize(n)
+        if k in norm_icon_map:
+            icon_url = norm_icon_map[k]
             break
 
     if icon_url:
@@ -104,11 +86,35 @@ for ch in root.findall("channel"):
 
 
 # ======================
-# 输出 gzip
+# programme同步（关键）
+# ======================
+for p in root.findall("programme"):
+    old = p.get("channel")
+
+    if old in old_to_new:
+        p.set("channel", old_to_new[old])
+
+
+# ======================
+# 去重 channel（关键）
+# ======================
+seen = set()
+
+for ch in list(root.findall("channel")):
+    cid = ch.get("id")
+
+    if cid in seen:
+        root.remove(ch)
+    else:
+        seen.add(cid)
+
+
+# ======================
+# 输出 gz
 # ======================
 xml_bytes = ET.tostring(root, encoding="utf-8", xml_declaration=True)
 
 with gzip.open(OUTPUT_FILE, "wb") as f:
     f.write(xml_bytes)
 
-print("✔ 完成EPG重建:", OUTPUT_FILE)
+print("✔ 完成：统一CID + logo + 去重")

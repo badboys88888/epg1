@@ -61,9 +61,9 @@
       "name": "ANIPLUS HD,ANIPLUSHD"
     },
     {
-      "epgid": "阿里郎",
+      "epgid": "ARIRANG阿里郎频道",
       "logo": "",
-      "name": "阿里郎,ARIRANG阿里郎頻道,ARIRANG,ARIRANG阿里郎频道"
+      "name": "ARIRANG阿里郎频道,ARIRANG,阿里郎"
     },
     {
       "epgid": "AXN",
@@ -738,7 +738,7 @@
     {
       "epgid": "CGTN英语",
       "logo": "https://gcore.jsdelivr.net/gh/taksssss/tv/icon/CGTN英语.png",
-      "name": "CGTN英语,CGTN(中國環球電視網)英語頻道,CGTN (中国环球电视网)英语频道"
+      "name": "CGTN英语,CGTN (中国环球电视网)英语频道,CGTN(中國環球電視網)英語頻道"
     },
     {
       "epgid": "CGTN记录",
@@ -1628,7 +1628,7 @@
     {
       "epgid": "历史频道",
       "logo": "",
-      "name": "历史频道,HISTORY(HD),HISTORY (HD),歷史頻道"
+      "name": "历史频道,歷史頻道,HISTORY(HD),HISTORY (HD)"
     },
     {
       "epgid": "歷史頻道",

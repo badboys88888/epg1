@@ -11,33 +11,26 @@ from io import BytesIO
 EPG_URL = "https://github.com/badboys88888/epg/raw/refs/heads/main/epg.xml.gz"
 ICON_MAP_URL = "https://raw.githubusercontent.com/badboys88888/epg/refs/heads/main/icon_map.json"
 
-OUTPUT_FILE = "epg_new.xml.gz"
+OUTPUT_FILE = "epg.xml.gz"
 
 # ======================
-# 读取 icon_map
+# icon_map
 # ======================
 icon_map = requests.get(ICON_MAP_URL).json()
 
-# ======================
-# normalize（保留HD）
-# ======================
 def normalize(text: str) -> str:
     text = text.upper()
-    text = re.sub(r"[ \-\_]", "", text)
+    text = re.sub(r"[ \-_]", "", text)
     return text
 
 norm_icon_map = {normalize(k): v for k, v in icon_map.items()}
 
 # ======================
-# 下载 EPG
+# 下载EPG
 # ======================
 resp = requests.get(EPG_URL)
-data = resp.content
+xml_data = gzip.decompress(resp.content)
 
-# 解压 gz
-xml_data = gzip.decompress(data)
-
-# 解析 XML
 root = ET.fromstring(xml_data)
 
 # ======================
@@ -47,7 +40,7 @@ for ch in root.findall("channel"):
 
     names = [d.text for d in ch.findall("display-name") if d.text]
 
-    # -------- logo匹配 --------
+    # -------- logo --------
     icon_url = None
     for n in names:
         key = normalize(n)
@@ -61,18 +54,18 @@ for ch in root.findall("channel"):
             icon = ET.SubElement(ch, "icon")
         icon.set("src", icon_url)
 
-    # -------- CID重建（保留HD）--------
+    # -------- CID --------
     main_name = names[0] if names else "UNKNOWN"
     cid = normalize(main_name)
 
     ch.set("id", cid)
 
 # ======================
-# 写回 gz
+# 写入 gz（关键补全）
 # ======================
-new_xml = ET.tostring(root, encoding="utf-8")
+new_xml = ET.tostring(root, encoding="utf-8", xml_declaration=True)
 
 with gzip.open(OUTPUT_FILE, "wb") as f:
     f.write(new_xml)
 
-print("完成：", OUTPUT_FILE)
+print("完成生成:", OUTPUT_FILE)

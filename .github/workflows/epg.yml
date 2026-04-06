@@ -35,7 +35,12 @@ jobs:
         run: |
           python epg_rebuild.py
 
-      # 6️⃣ 提交
+      # 🆕 6️⃣ 生成 epg.json（关键）
+      - name: Build epg.json
+        run: |
+          python build_epg_json.py
+
+      # 7️⃣ 提交
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"

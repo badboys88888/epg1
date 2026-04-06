@@ -2,35 +2,40 @@ name: EPG Rebuild
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # 每6小时跑一次
-  workflow_dispatch:        # 手动触发
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 拉代码
+      # 1️⃣ 拉代码
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. 安装 Python
+      # 2️⃣ Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # 3. 安装依赖
+      # 3️⃣ 安装依赖
       - name: Install dependencies
         run: |
-          pip install requests
+          pip install requests opencc-python-reimplemented
 
-      # 4. 运行你的脚本
+      # 4️⃣ 生成 name_map
+      - name: Generate name map
+        run: |
+          python auto_name_map.py
+
+      # 5️⃣ 重建EPG
       - name: Run EPG rebuild
         run: |
           python epg_rebuild.py
 
-      # 5. 提交更新结果
+      # 6️⃣ 提交
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"

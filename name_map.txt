@@ -153,6 +153,7 @@ CGTNDOCUMENTARY=CGTN Documentary
 CGTNHD=CGTN HD
 CHC动作电影=CHC动作电影
 CHC家庭电影=CHC家庭电影
+CHC影迷电影=CHC影迷电影
 CHC高清电影=CHC高清电影
 CI=CI
 CI罪案偵查頻道=CI 罪案侦查频道

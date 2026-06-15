@@ -232,6 +232,7 @@ DWENGLISHHD=DW English HD
 DW德國之聲=DW德国之声
 DEALORNODEAL=Deal or No Deal
 DEUTSCHEWELLE(ENGLISH)=Deutsche Welle (English)
+DEWANRAKYAT=Dewan Rakyat
 DISCOVERY=Discovery
 DISCOVERYASIA=Discovery Asia
 DISCOVERYASIA(HD)=Discovery Asia (HD)

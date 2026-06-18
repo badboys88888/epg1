@@ -1385,7 +1385,6 @@ WEDOTVMOVIESHD=wedotv Movies HD
 贵州影视=贵州影视
 贵州生态=贵州生态
 贵州科教=贵州科教
-超級電視台=超级电视台
 車迷TV=车迷TV
 車迷TVHD=车迷TV HD
 辽宁体育=辽宁体育

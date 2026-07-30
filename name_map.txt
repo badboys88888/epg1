@@ -295,7 +295,6 @@ FOODNETWORK=Food Network
 FOODNETWORK(HD)=Food Network (HD)
 FOODNETWORK美食台HD=Food Network 美食台HD
 FOODNETWORK美食台=FoodNetwork美食台
-FOODON=FoodON
 FOXNEWSCHANNELHD=Fox News Channel HD
 FRANCE24(ENGLISH)=France 24 (English)
 FRANCE24(FRENCH)=France 24 (French)

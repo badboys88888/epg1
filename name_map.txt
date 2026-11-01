@@ -755,7 +755,6 @@ TVNMOVIESHD=tvN Movies HD
 TVNMOVIESONDEMAND=tvN Movies On Demand
 WEDOTVMOVIES=wedotv Movies
 WEDOTVMOVIESHD=wedotv Movies HD
-三沙卫视=三沙卫视
 三沙衛視=三沙卫视
 三立台湾台=三立台湾台
 三立台灣台=三立台湾台
